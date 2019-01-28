@@ -1,0 +1,5 @@
+kubectl create namespace servicedemo
+
+kubectl apply -f ./Demos/0prepare/4service-prepare/secret.yaml
+
+kubectl create secret docker-registry clouddemoimages --namespace servicedemo --docker-server=https://clouddemo.azurecr.io --docker-username=clouddemo --docker-password=xxxxx --docker-email=xxxxx

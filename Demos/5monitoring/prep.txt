@@ -1,0 +1,27 @@
+kubectl create namespace monitoring
+
+helm init
+
+helm install --name monitor stable/prometheus --namespace monitoring --set global.rbacEnable=false --set rbac.create=false --set rbac.createRole=false --set rbac.createClusterRole=false 
+#--set server.service.type=LoadBalancer
+
+helm install --name dashboard stable/grafana -f "C:\repos\pascal\clouddemo\Demos\5monitoring\grafanavalues.yaml" --namespace monitoring --set global.rbacEnable=false --set rbac.create=false --set rbac.createRole=false --set rbac.createClusterRole=false
+ #--set persistence.enabled=true --set persistence.accessModes=ReadWriteMany
+
+helm upgrade dashboard stable/grafana --namespace monitoring -f "C:\repos\pascal\clouddemo\Demos\5monitoring\grafanavalues.yaml" --set global.rbacEnable=false --set rbac.create=false --set rbac.createRole=false --set rbac.createClusterRole=false
+
+helm delete --purge dashboard
+helm delete --purge monitor
+
+kubectl port-forward dashboard-grafana-78bc58fb54-qjr78 3000:3000 -n monitoring 
+
+--set global.rbacEnable=false --set rbac.create=false --set rbac.createRole=false --set rbac.createClusterRole=false
+
+helm upgrade dashboard stable/grafana --namespace monitoring --set global.rbacEnable=false --set rbac.create=false --set rbac.createRole=false --set rbac.createClusterRole=false --set persistence.enabled=true --set persistence.accessModes=ReadWriteMany
+helm upgrade monitor stable/prometheus --namespace monitoring --set global.rbacEnable=false --set rbac.create=false --set rbac.createRole=false --set rbac.createClusterRole=false --set server.service.type=LoadBalancer
+
+
+#################################################################################
+######   WARNING: Persistence is disabled!!! You will lose your data when   #####
+######            the Grafana pod is terminated.                            #####
+#################################################################################
